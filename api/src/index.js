@@ -1,13 +1,25 @@
 // Core
 const express = require("express");
 
-const app = express();
-const port = process.env.PORT;
+// Config
+const { port } = require("./configs");
 
-app.get("/api", (req, res) => {
+// DB
+const { connectToDb } = require("./helpers/db");
+
+const app = express();
+
+app.get("/api", (_, res) => {
   res.send("API server handle request properly");
 });
 
-app.listen(port, () => {
-  console.log(`The API service was started on port ${port}`);
-});
+const startAPIServer = () => {
+  app.listen(port, () => {
+    console.log(`The API service was started on port ${port}`);
+  });
+};
+
+connectToDb()
+  .on("error", console.log)
+  .on("disconnected", connectToDb)
+  .once("open", startAPIServer);

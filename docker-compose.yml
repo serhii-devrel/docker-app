@@ -9,3 +9,9 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+      - DB_URL=mongodb://api_db:27017/api
+    depends_on:
+      - api_db
+
+  api_db:
+    image: mongo:latest
