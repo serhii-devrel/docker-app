@@ -1,4 +1,7 @@
-FROM node:13
+FROM node:16-alpine3.11
 
 WORKDIR /usr/src/app
 COPY . .
+RUN apk update && apk add bash 
+RUN chmod +x ./entrypoint.sh
+RUN [ "bash", "-c", "./entrypoint.sh" ]
