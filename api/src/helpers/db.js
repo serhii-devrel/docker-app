@@ -10,6 +10,11 @@ const connectToDb = () => {
   return mongoose.connection;
 };
 
+const handleError = (err) => {
+  console.log(`Something went wrong, error is: ${err}`);
+};
+
 module.exports = {
   connectToDb,
+  handleError,
 };

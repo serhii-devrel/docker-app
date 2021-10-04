@@ -1,5 +1,13 @@
 #!/bin/bash
 
-echo "Hello from entrypoint"
+echo "NODE_ENV IS: ${NODE_ENV}"
+
 npm install
-npm run start
+
+if [ $NODE_ENV = "development" ]; then
+    npm run dev
+fi
+
+if [ $NODE_ENV = "production" ]; then
+    npm run build
+fi
