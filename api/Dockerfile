@@ -4,4 +4,4 @@ WORKDIR /usr/src/app
 COPY . .
 RUN apk update && apk add bash 
 RUN chmod +x ./entrypoint.sh
-RUN [ "bash", "-c", "./entrypoint.sh" ]
+ENTRYPOINT [ "bash", "-c", "./entrypoint.sh" ]
