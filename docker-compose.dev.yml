@@ -5,4 +5,10 @@ services:
     environment:
       - NODE_ENV=development
     volumes:
+      - ./frontend/src:/usr/src/app/src
+
+  api:
+    environment:
+      - NODE_ENV=development
+    volumes:
       - ./api/src:/usr/src/app/src
