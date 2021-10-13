@@ -3,6 +3,7 @@ version: "3.2"
 services:
   api:
     build: ./api
+    container_name: "docker-app-api"
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -13,10 +14,31 @@ services:
     depends_on:
       - api_db
 
+  auth:
+    build: ./auth
+    restart: unless-stopped
+    container_name: "docker-app-auth"
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DB_URL=mongodb://auth_db:27017/auth
+      - NODE_ENV=production
+    depends_on:
+      - auth_db
+
   api_db:
     image: mongo:latest
+    container_name: "docker-app-api-db"
     volumes:
       - mongodb_api:/data/db
 
+  auth_db:
+    image: mongo:latest
+    container_name: "docker-app-auth-db"
+    volumes:
+      - mongodb_auth:/data/db
+
 volumes:
   mongodb_api:
+  mongodb_auth:
