@@ -5,8 +5,8 @@ services:
     build: ./frontend
     container_name: "docker-app-frontend"
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    # ports:
+    # - "3000:3000"
     environment:
       - PORT=3000
       - NODE_ENV=production
@@ -51,6 +51,16 @@ services:
     container_name: "docker-app-auth-db"
     volumes:
       - mongodb_auth:/data/db
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: "docker-app-nginx"
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - frontend
 
 volumes:
   mongodb_api:
