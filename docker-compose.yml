@@ -5,53 +5,82 @@ services:
     build: ./frontend
     container_name: "docker-app-frontend"
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    # ports:
+    # - "3000:3000" Will be visible from outside, but now is disabled
     environment:
       - PORT=3000
       - NODE_ENV=production
     depends_on:
       - api_db
       - auth_db
+    networks:
+      - docker-app-network
 
   api:
     build: ./api
     container_name: "docker-app-api"
     restart: unless-stopped
-    ports:
-      - "3001:3001"
+    # ports:
+    # - "3001:3001" Will be visible from outside, but now is disabled
     environment:
       - PORT=3001
       - DB_URL=mongodb://api_db:27017/api
+      - AUTH_BASE_URL=http://auth:3002/auth
       - NODE_ENV=production
     depends_on:
       - api_db
+    networks:
+      - docker-app-network
 
   auth:
     build: ./auth
     restart: unless-stopped
     container_name: "docker-app-auth"
-    ports:
-      - "3002:3002"
+    # ports:
+    # - "3002:3002" Will be visible from outside, but now is disabled
     environment:
       - PORT=3002
       - DB_URL=mongodb://auth_db:27017/auth
       - NODE_ENV=production
     depends_on:
       - auth_db
+    networks:
+      - docker-app-network
 
   api_db:
     image: mongo:latest
     container_name: "docker-app-api-db"
     volumes:
       - mongodb_api:/data/db
+    networks:
+      - docker-app-network
 
   auth_db:
     image: mongo:latest
     container_name: "docker-app-auth-db"
     volumes:
       - mongodb_auth:/data/db
+    networks:
+      - docker-app-network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: "docker-app-nginx"
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - frontend
+      - api
+      - auth
+    networks:
+      - docker-app-network
 
 volumes:
   mongodb_api:
   mongodb_auth:
+
+networks:
+  docker-app-network:
+    driver: bridge
