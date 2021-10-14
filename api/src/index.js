@@ -1,9 +1,10 @@
 // Core
 const express = require("express");
 const mongoose = require("mongoose");
+const axios = require("axios");
 
 // Config
-const { port } = require("./configs");
+const { port, AUTH_BASE_URL } = require("./configs");
 
 // DB
 const { connectToDb, handleError } = require("./helpers/db");
@@ -18,6 +19,15 @@ const PostModel = mongoose.model("Post", postSchema);
 
 app.get("/api", (_, res) => {
   res.send("API server handle request properly");
+});
+
+app.get("/catalog", (req, res) => {
+  console.log("AUTH SERVICE URL IS: ", AUTH_BASE_URL);
+  axios.get(`${AUTH_BASE_URL}/user`).then((response) => {
+    res.json({
+      currentUser: response.data,
+    });
+  });
 });
 
 const startAPIServer = async () => {
