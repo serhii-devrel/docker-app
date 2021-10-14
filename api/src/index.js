@@ -21,7 +21,7 @@ app.get("/api", (_, res) => {
   res.send("API server handle request properly");
 });
 
-app.get("/catalog", (req, res) => {
+app.get("/api/catalog", (req, res) => {
   console.log("AUTH SERVICE URL IS: ", AUTH_BASE_URL);
   axios.get(`${AUTH_BASE_URL}/user`).then((response) => {
     res.json({

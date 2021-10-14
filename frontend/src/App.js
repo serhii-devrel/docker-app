@@ -1,7 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+// Core
+import React, { useEffect } from "react";
+import axios from "axios";
+
+// Static
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
+  useEffect(() => {
+    axios.get("/api/catalog").then((response) => {
+      console.log(response.data);
+    });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">

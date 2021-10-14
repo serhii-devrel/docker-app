@@ -12,3 +12,13 @@ services:
       - NODE_ENV=development
     volumes:
       - ./api/src:/usr/src/app/src
+
+  auth:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./auth/src:/usr/src/app/src
+
+  nginx:
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/nginx.conf
